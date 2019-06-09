@@ -52,7 +52,31 @@ class Snake(Body):
         self.direction = KEY_RIGHT
         self.timeout = TIMEOUT
         self.hit_score = 0
+        self.direction_map = {KEY_RIGHT: self.move_right,
+                              KEY_LEFT: self.move_left,
+                              KEY_DOWN: self.move_down,
+                              KEY_UP: self.move_up}
 
         for i in range(SNAKE_LENGTH, 0, -1):
             self.add_body(x - i, y)
         self.add_body(x, y)
+
+    def move_up(self):
+        self.head_y -= 1
+        if self.head_y < 1:
+            self.head_y = MAX_Y
+
+    def move_down(self):
+        self.head_y += 1
+        if self.head_y > MAX_Y:
+            self.head_y = 1
+
+    def move_left(self):
+        self.head_x -= 1
+        if self.head_x < 1:
+            self.head_x = MAX_X
+
+    def move_right(self):
+        self.head_x += 1
+        if self.head_x > MAX_X:
+            self.head_x = 1
