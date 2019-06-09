@@ -1,5 +1,5 @@
-from curses import KEY_RIGHT, KEY_LEFT, KEY_DOWN, KEY_UP, color_pair, newwin, start_color, initscr, noecho, curs_set, \
-    init_pair
+from curses import KEY_RIGHT, KEY_LEFT, KEY_DOWN, KEY_UP, color_pair, endwin, newwin, start_color, initscr, noecho, \
+    curs_set, init_pair
 from random import randint
 
 # Configuration
@@ -109,19 +109,51 @@ class Snake(Body):
 
 
 if __name__ == '__main__':
-    initscr()
-    start_color()
-    curs_set(0)
-    noecho()
+    try:
+        initscr()
+        start_color()
+        curs_set(0)
+        noecho()
 
-    init_pair(1, 2, 0)  # Green
-    init_pair(2, 3, 0)  # yellow
-    init_pair(3, 1, 0)  # Red
+        init_pair(1, 2, 0)  # Green
+        init_pair(2, 3, 0)  # yellow
+        init_pair(3, 1, 0)  # Red
 
-    window = newwin(HEIGHT, WIDTH, 0, 0)
-    window.timeout(TIMEOUT)
-    window.keypad(1)
-    window.border(0)
+        window = newwin(HEIGHT, WIDTH, 0, 0)
+        window.timeout(TIMEOUT)
+        window.keypad(1)
+        window.border(0)
 
-    snake = Snake(SNAKE_X, SNAKE_Y, window)
-    food = Food(window)
+        snake = Snake(SNAKE_X, SNAKE_Y, window)
+        food = Food(window)
+
+        while True:
+            window.clear()
+            window.border(0)
+            snake.render()
+            food.render()
+
+            window.addstr(0, 5, snake.score)
+            event = window.getch()
+
+            if event in [KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT]:
+                snake.change_direction(event)
+
+            if snake.head.coor == food.coor:
+                food.renew()
+                snake.eat_food()
+
+            if event == 32:
+                key = -1
+                while key != 32:
+                    key = window.getch()
+
+            if snake.update():
+                break
+
+        endwin()
+        print(snake.score)
+
+    except (KeyboardInterrupt, Exception) as e:
+        endwin()
+        print('\033[93m', e, '\033[0m \n')
