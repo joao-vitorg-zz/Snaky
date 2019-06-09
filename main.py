@@ -1,0 +1,15 @@
+from curses import KEY_RIGHT, KEY_LEFT, KEY_DOWN, KEY_UP
+
+# Configuration
+HEIGHT = 20
+WIDTH = 35
+MAX_Y = HEIGHT - 2
+MAX_X = WIDTH - 2
+TIMEOUT = 100
+SNAKE_LENGTH = 5
+SNAKE_X = SNAKE_LENGTH + 1
+SNAKE_Y = 3
+REV_DIR_MAP = {KEY_RIGHT: KEY_LEFT,
+               KEY_LEFT: KEY_RIGHT,
+               KEY_DOWN: KEY_UP,
+               KEY_UP: KEY_DOWN}
