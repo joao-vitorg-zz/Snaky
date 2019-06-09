@@ -61,6 +61,10 @@ class Snake(Body):
             self.add_body(x - i, y)
         self.add_body(x, y)
 
+    def change_direction(self, direction):
+        if direction != REV_DIR_MAP[self.direction]:
+            self.direction = direction
+
     def move_up(self):
         self.head_y -= 1
         if self.head_y < 1:
