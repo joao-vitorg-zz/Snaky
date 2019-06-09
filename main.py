@@ -29,15 +29,30 @@ class Food:
 
 
 class Body:
-    def __init__(self, window, head):
+    def __init__(self, x, y, window):
         self.window = window
         self.body_list = []
-        self.head = head
+
+        self.last_head_coor = (x, y)
+        self.head_x = x
+        self.head_y = y
 
     def render(self):
-        self.window.addstr(*self.head, '█', color_pair(2))  # Head
+        self.window.addstr(self.head_x, self.head_y, '█', color_pair(2))  # Head
         for body in self.body_list:
             self.window.addstr(*body, '█', color_pair(1))  # Body
 
     def add_body(self, x, y):
         self.body_list.append([x, y])
+
+
+class Snake(Body):
+    def __init__(self, x, y, window):
+        super().__init__(x, y, window)
+        self.direction = KEY_RIGHT
+        self.timeout = TIMEOUT
+        self.hit_score = 0
+
+        for i in range(SNAKE_LENGTH, 0, -1):
+            self.add_body(x - i, y)
+        self.add_body(x, y)
