@@ -1,4 +1,5 @@
-from curses import KEY_RIGHT, KEY_LEFT, KEY_DOWN, KEY_UP, color_pair
+from curses import KEY_RIGHT, KEY_LEFT, KEY_DOWN, KEY_UP, color_pair, newwin, start_color, initscr, noecho, curs_set, \
+    init_pair
 from random import randint
 
 # Configuration
@@ -105,3 +106,22 @@ class Snake(Body):
     @property
     def score(self):
         return 'Score : {}'.format(self.hit_score)
+
+
+if __name__ == '__main__':
+    initscr()
+    start_color()
+    curs_set(0)
+    noecho()
+
+    init_pair(1, 2, 0)  # Green
+    init_pair(2, 3, 0)  # yellow
+    init_pair(3, 1, 0)  # Red
+
+    window = newwin(HEIGHT, WIDTH, 0, 0)
+    window.timeout(TIMEOUT)
+    window.keypad(1)
+    window.border(0)
+
+    snake = Snake(SNAKE_X, SNAKE_Y, window)
+    food = Food(window)
