@@ -34,6 +34,7 @@ class Body:
         self.body_list = []
 
         self.last_head_coor = (x, y)
+        self.head_coor = (x, y)
         self.head_x = x
         self.head_y = y
 
@@ -60,6 +61,15 @@ class Snake(Body):
         for i in range(SNAKE_LENGTH, 0, -1):
             self.add_body(x - i, y)
         self.add_body(x, y)
+
+    def update(self):
+        self.body_list.pop(-1)
+        last_body = self.body_list[-1]
+        self.body_list.insert(-1, last_body)
+        self.last_head_coor = self.head_coor
+        self.direction_map[self.direction]()
+
+        return any([body.coor == self.head_coor for body in self.body_list[:-1]])
 
     def eat_food(self):
         self.add_body(*self.last_head_coor)
