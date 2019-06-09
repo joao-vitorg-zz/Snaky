@@ -61,6 +61,13 @@ class Snake(Body):
             self.add_body(x - i, y)
         self.add_body(x, y)
 
+    def eat_food(self):
+        self.add_body(*self.last_head_coor)
+        self.hit_score += 1
+        if self.hit_score % 3 == 0:
+            self.timeout -= 5
+            self.window.timeout(self.timeout)
+
     def change_direction(self, direction):
         if direction != REV_DIR_MAP[self.direction]:
             self.direction = direction
@@ -84,3 +91,7 @@ class Snake(Body):
         self.head_x += 1
         if self.head_x > MAX_X:
             self.head_x = 1
+
+    @property
+    def score(self):
+        return 'Score : {}'.format(self.hit_score)
