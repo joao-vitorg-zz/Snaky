@@ -18,17 +18,26 @@ REV_DIR_MAP = {KEY_RIGHT: KEY_LEFT,
 
 class Food:
     def __init__(self, window):
-        self.x = randint(1, MAX_X)
-        self.y = randint(1, MAX_Y)
+        self.coor = (randint(1, MAX_X), randint(1, MAX_Y))
         self.window = window
 
     def render(self):
-        self.window.addstr(self.y, self.x, "█", color_pair(3))
+        self.window.addstr(*self.coor, "█", color_pair(3))
 
     def renew(self):
-        self.x = randint(1, MAX_X)
-        self.y = randint(1, MAX_Y)
+        self.coor = (randint(1, MAX_X), randint(1, MAX_Y))
 
-    @property
-    def coor(self):
-        return self.x, self.y
+
+class Body:
+    def __init__(self, window, head):
+        self.window = window
+        self.body_list = []
+        self.head = head
+
+    def render(self):
+        self.window.addstr(*self.head, '█', color_pair(2))  # Head
+        for body in self.body_list:
+            self.window.addstr(*body, '█', color_pair(1))  # Body
+
+    def add_body(self, x, y):
+        self.body_list.append([x, y])
