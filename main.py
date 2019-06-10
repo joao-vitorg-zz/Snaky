@@ -63,16 +63,16 @@ class Snake(Body):
                               KEY_DOWN: self.move_down,
                               KEY_UP: self.move_up}
 
-        for i in range(SNAKE_LENGTH, 0, -1):
+        for i in range(1, SNAKE_LENGTH):
             self.add_body(y, x-i)
 
     def update(self):
-        self.body_list.pop(0)
-        self.add_body(*self.head_coor)
+        self.body_list.pop(-1)
+        self.body_list.insert(0, self.head_coor)
         self.last_head_coor = self.head_coor
         self.direction_map[self.direction]()
 
-        return any([body == self.head_coor for body in self.body_list[:-1]])  # collided
+        return any([tuple(body) == self.head_coor for body in self.body_list])
 
     def eat_food(self):
         self.add_body(*self.last_head_coor)
@@ -107,7 +107,7 @@ class Snake(Body):
 
     @property
     def score(self):
-        return 'Score : {}'.format(self.hit_score)
+        return 'Score: {}'.format(self.hit_score)
 
 
 if __name__ == '__main__':
@@ -135,7 +135,9 @@ if __name__ == '__main__':
             snake.render()
             food.render()
 
-            window.addstr(0, 5, snake.score)
+            # window.addstr(0, 0, str([snake.head_coor]+[body for body in snake.body_list]))
+            window.addstr(0, 13, snake.score)
+
             event = window.getch()
 
             if event in [KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT]:
