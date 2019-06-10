@@ -8,7 +8,7 @@ WIDTH = 35
 MAX_Y = HEIGHT - 2
 MAX_X = WIDTH - 2
 TIMEOUT = 100
-SNAKE_LENGTH = 5
+SNAKE_LENGTH = 6
 SNAKE_X = SNAKE_LENGTH + 1
 SNAKE_Y = 3
 REV_DIR_MAP = {KEY_RIGHT: KEY_LEFT,
@@ -19,38 +19,42 @@ REV_DIR_MAP = {KEY_RIGHT: KEY_LEFT,
 
 class Food:
     def __init__(self, window):
-        self.coor = (randint(1, MAX_X), randint(1, MAX_Y))
+        self.coor = (randint(1, MAX_Y), randint(1, MAX_X))
         self.window = window
 
     def render(self):
         self.window.addstr(*self.coor, "█", color_pair(3))
 
     def renew(self):
-        self.coor = (randint(1, MAX_X), randint(1, MAX_Y))
+        self.coor = (randint(1, MAX_Y), randint(1, MAX_X))
 
 
 class Body:
-    def __init__(self, x, y, window):
+    def __init__(self, y, x, window):
         self.window = window
         self.body_list = []
 
-        self.last_head_coor = (x, y)
-        self.head_coor = (x, y)
-        self.head_x = x
+        # Head
+        self.last_head_coor = (y, x)
         self.head_y = y
+        self.head_x = x
 
     def render(self):
-        self.window.addstr(self.head_x, self.head_y, '█', color_pair(2))  # Head
+        self.window.addstr(*self.head_coor, '█', color_pair(2))  # Head
         for body in self.body_list:
             self.window.addstr(*body, '█', color_pair(1))  # Body
 
-    def add_body(self, x, y):
-        self.body_list.append([x, y])
+    def add_body(self, y, x):
+        self.body_list.append([y, x])
+
+    @property
+    def head_coor(self):
+        return self.head_y, self.head_x
 
 
 class Snake(Body):
-    def __init__(self, x, y, window):
-        super().__init__(x, y, window)
+    def __init__(self, y, x, window):
+        super().__init__(y, x, window)
         self.direction = KEY_RIGHT
         self.timeout = TIMEOUT
         self.hit_score = 0
@@ -60,17 +64,15 @@ class Snake(Body):
                               KEY_UP: self.move_up}
 
         for i in range(SNAKE_LENGTH, 0, -1):
-            self.add_body(x - i, y)
-        self.add_body(x, y)
+            self.add_body(y, x-i)
 
     def update(self):
-        self.body_list.pop(-1)
-        last_body = self.body_list[-1]
-        self.body_list.insert(-1, last_body)
+        self.body_list.pop(0)
+        self.add_body(*self.head_coor)
         self.last_head_coor = self.head_coor
         self.direction_map[self.direction]()
 
-        return any([body.coor == self.head_coor for body in self.body_list[:-1]])
+        return any([body == self.head_coor for body in self.body_list[:-1]])  # collided
 
     def eat_food(self):
         self.add_body(*self.last_head_coor)
@@ -124,7 +126,7 @@ if __name__ == '__main__':
         window.keypad(1)
         window.border(0)
 
-        snake = Snake(SNAKE_X, SNAKE_Y, window)
+        snake = Snake(SNAKE_Y, SNAKE_X, window)
         food = Food(window)
 
         while True:
@@ -139,7 +141,7 @@ if __name__ == '__main__':
             if event in [KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT]:
                 snake.change_direction(event)
 
-            if snake.head.coor == food.coor:
+            if snake.head_coor == food.coor:
                 food.renew()
                 snake.eat_food()
 
