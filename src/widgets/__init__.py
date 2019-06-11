@@ -3,6 +3,6 @@
 
 __all__ = ['Body', 'Food', 'Snake']
 
-from body import *
-from food import *
-from snake import *
+from .body import *
+from .food import *
+from .snake import *
