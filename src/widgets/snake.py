@@ -33,8 +33,6 @@ class Snake(Body):
         self.last_head_coor = self.head_coor
         self.direction_map[self.direction]()
 
-        return any([tuple(body) == self.head_coor for body in self.body_list])
-
     def eat_food(self):
         self.add_body(*self.last_head_coor)
         self.hit_score += 1
@@ -69,3 +67,7 @@ class Snake(Body):
     @property
     def score(self):
         return 'Score: {}'.format(self.hit_score)
+
+    @property
+    def collided(self):
+        return any([tuple(body) == self.head_coor for body in self.body_list])
