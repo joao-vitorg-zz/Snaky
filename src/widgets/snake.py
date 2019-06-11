@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 from curses import KEY_RIGHT, KEY_LEFT, KEY_DOWN, KEY_UP
 
-from src import Body, TIMEOUT, SNAKE_Y, SNAKE_X, SNAKE_LENGTH, MAX_X, MAX_Y
+from src.conf import TIMEOUT, SNAKE_Y, SNAKE_X, SNAKE_LENGTH, MAX_X, MAX_Y
+from src.widgets import Body
 
 __all__ = ['Snake']
 

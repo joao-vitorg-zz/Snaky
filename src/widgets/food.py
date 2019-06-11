@@ -3,7 +3,7 @@
 from curses import color_pair
 from random import randint
 
-from src import MAX_Y, MAX_X
+from src.conf import MAX_Y, MAX_X
 
 __all__ = ['Food']
 

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from curses import color_pair
 
-from src import SNAKE_Y, SNAKE_X
+from src.conf import SNAKE_Y, SNAKE_X
 
 __all__ = ['Body']
 
