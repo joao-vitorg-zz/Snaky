@@ -2,16 +2,20 @@
 # -*- coding: utf-8 -*-
 from curses import color_pair
 
+from src import SNAKE_Y, SNAKE_X
+
+__all__ = ['Body']
+
 
 class Body:
-    def __init__(self, y, x, window):
+    def __init__(self, window):
         self.window = window
         self.body_list = []
 
         # Head
-        self.last_head_coor = (y, x)
-        self.head_y = y
-        self.head_x = x
+        self.last_head_coor = (SNAKE_Y, SNAKE_X)
+        self.head_y = SNAKE_Y
+        self.head_x = SNAKE_X
 
     def render(self):
         self.window.addstr(*self.head_coor, '█', color_pair(2))  # Head

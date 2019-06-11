@@ -3,15 +3,18 @@
 from curses import color_pair
 from random import randint
 
+from src import MAX_Y, MAX_X
+
+__all__ = ['Food']
+
 
 class Food:
-    def __init__(self, max_y, max_x, window):
-        self.max_y, self.max_x = max_y, max_x
+    def __init__(self, window):
+        self.coor = (randint(1, MAX_Y), randint(1, MAX_X))
         self.window = window
-        self.coor = (randint(1, max_y), randint(1, max_x))
 
     def render(self):
         self.window.addstr(*self.coor, "█", color_pair(3))
 
     def renew(self):
-        self.coor = (randint(1, self.max_y), randint(1, self.max_x))
+        self.coor = (randint(1, MAX_Y), randint(1, MAX_X))
